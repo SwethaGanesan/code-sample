@@ -1,6 +1,5 @@
 //
 //  main.cpp
-//  dynamicProgramming
 //
 //  Created by Swetha Ganesan on 1/3/15.
 //  Copyright (c) 2015 Swetha Ganesan. All rights reserved.
@@ -12,56 +11,53 @@
 
 int maximizeProfit(std::vector<int> houses){
         
-    unsigned long noHouses = houses.size();
+    int noHouses = houses.size();
     
-    for(int i = 0 ; i < noHouses ; i++)
-    {
-        if(houses[i] < 0)
-            throw std::invalid_argument( "unexpected negative value" );
-    }
-        
     // Base Case : If there are no houses, max value to be robbed is 0
     if(noHouses == 0)
     {
         return 0;
     }
         
-    // Base Case ; If there is only one house, the maximum value to be
-    //robbed is the value of that house
+    // Base Case : If there is only one house, the maximum value to be
+    // robbed is the value of that house
     if(noHouses == 1)
     {
+        if (houses[0] < 0) throw std::invalid_argument("unexpected negative value");
         return houses[0];
     }
         
-    //maxValue[i] is the total maximum value of the robbery
-    //if the street contained houses starting from ith house
+    // maxValue[i] is the total maximum value of the robbery
+    // if the street contained houses starting from ith house
     int* maxValue = new int[noHouses];
     
-    /**General case
-    * Consider set {c,d}
-    * Our choice must be Max(c,d)
-    *
-    * Consider set {b,c,d}
-    * Our choices are either b+d or c
-    * which is Max( b+d, c)
-    *
-    * Consider set {a,b,c,d}
-    * Our choices are Max(a + Max(c,d), b + d)
-    * => F({a,b,c,d,...}) = Max((F(a) + F({c,d,e,...}),
-    * 							(F(b) + F({d,e,...}))))
-    * To avoid recalculation of intermediate answers, we
-    * store the answer to the subproblem and arrive
-    * at final answer
-    *
-    **/
+    /*
+     General case
+     Consider set {c,d}
+     Our choice must be Max(c,d)
+    
+     Consider set {b,c,d}
+     Our choices are either b+d or c
+     which is Max( b+d, c)
+    
+     Consider set {a,b,c,d}
+     Our choices are Max(a + Max(c,d), b + d)
+     => F({a,b,c,d,...}) = Max((F(a) + F({c,d,e,...}),
+     							(F(b) + F({d,e,...}))))
+     To avoid recalculation of intermediate answers, we
+     store the answer to the subproblem and arrive
+     at final answer
+    
+    */
     maxValue[0] = houses[0];
     maxValue[1] = std::max(houses[1], houses[0]);
-    for(int i = 2; i< noHouses ; i++)
+    for(int i = 2; i < noHouses; i++)
     {
-        maxValue[i] = std::max(houses[i] + maxValue[i -2], maxValue[i-1]);
+        if(houses[i] < 0) throw std::invalid_argument("unexpected negative value");
+        maxValue[i] = std::max(houses[i] + maxValue[i-2], maxValue[i-1]);
     }
     
-    return maxValue[noHouses - 1];
+    return maxValue[noHouses-1];
 }
 
 bool testCases()
@@ -114,8 +110,7 @@ bool testCases()
 
 int main(int argc, const char * argv[])
 {
-    std::string result = testCases() ? "Tests Passed" : "Tests Failed";
-    std::cout << result;
+    testCases() ?  std::cout << "Tests Passed" :  std::cout << "Tests Failed";
     return 0;
 }
 
