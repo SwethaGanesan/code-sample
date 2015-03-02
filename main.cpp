@@ -9,8 +9,8 @@
 #include <vector>
 
 
-int maximizeProfit(std::vector<int> houses){
-        
+int maximizeProfit(std::vector<int> houses)
+{
     int noHouses = houses.size();
     
     // Base Case : If there are no houses, max value to be robbed is 0
@@ -23,7 +23,8 @@ int maximizeProfit(std::vector<int> houses){
     // robbed is the value of that house
     if(noHouses == 1)
     {
-        if (houses[0] < 0) throw std::invalid_argument("unexpected negative value");
+        if (houses[0] < 0)
+            throw std::invalid_argument("unexpected negative value");
         return houses[0];
     }
         
@@ -31,29 +32,29 @@ int maximizeProfit(std::vector<int> houses){
     // if the street contained houses starting from ith house
     int* maxValue = new int[noHouses];
     
-    /*
-     General case
-     Consider set {c,d}
-     Our choice must be Max(c,d)
     
-     Consider set {b,c,d}
-     Our choices are either b+d or c
-     which is Max( b+d, c)
+    // General case
+    // Consider set {c,d}
+    // Our choice must be Max(c,d)
+    //
+    // Consider set {b,c,d}
+    // Our choices are either b+d or c
+    // which is Max( b+d, c)
+    //
+    // Consider set {a,b,c,d}
+    // Our choices are Max(a + Max(c,d), b + d)
+    // => F({a,b,c,d,...}) = Max((F(a) + F({c,d,e,...}),
+    // 							(F(b) + F({d,e,...}))))
+    // To avoid recalculation of intermediate answers, we
+    // store the answer to the subproblem and arrive
+    // at final answer
     
-     Consider set {a,b,c,d}
-     Our choices are Max(a + Max(c,d), b + d)
-     => F({a,b,c,d,...}) = Max((F(a) + F({c,d,e,...}),
-     							(F(b) + F({d,e,...}))))
-     To avoid recalculation of intermediate answers, we
-     store the answer to the subproblem and arrive
-     at final answer
-    
-    */
     maxValue[0] = houses[0];
     maxValue[1] = std::max(houses[1], houses[0]);
     for(int i = 2; i < noHouses; i++)
     {
-        if(houses[i] < 0) throw std::invalid_argument("unexpected negative value");
+        if(houses[i] < 0)
+            throw std::invalid_argument("unexpected negative value");
         maxValue[i] = std::max(houses[i] + maxValue[i-2], maxValue[i-1]);
     }
     
@@ -105,7 +106,6 @@ bool testCases()
     }
     
     return ans;
-    
 }
 
 int main(int argc, const char * argv[])
